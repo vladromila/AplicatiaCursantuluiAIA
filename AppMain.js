@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, AsyncStorage } from 'react-native';
+import { Text, AsyncStorage, Modal, View } from 'react-native';
 import { createAppContainer, createMaterialTopTabNavigator } from 'react-navigation';
 import { Platform } from 'react-native';
 import { connect } from 'react-redux';
 import ClassesList from './src/components/ClassesList'
 import NClassesList from './src/components/NClassesList';
 import SClassesList from './src/components/SClassesList';
-import { Icon, Header } from 'react-native-elements';
+import { Icon, Header, Button } from 'react-native-elements';
 import { fetchedData } from './src/actions'
 
 ClassesList.navigationOptions = {
@@ -67,7 +67,8 @@ class AppMain extends React.Component {
     this.state = {
       uid: null,
       studentUid: null,
-      studentName: ''
+      studentName: '',
+      isConfirmModalVisible: false
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -143,20 +144,51 @@ class AppMain extends React.Component {
       <React.Fragment>
         <Header
           backgroundColor="#1E6EC7"
-          centerComponent={<Text style={{ fontSize: 21, color: 'white', fontWeight: 'bold' }}>{this.state.studentName || 'Elevi'}</Text>}
+          centerComponent={<Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold' }}>{this.state.studentName || 'Elevi'}</Text>}
           leftComponent={this.state.uid === null ? <Icon name="photo-camera" size={27} color='white' onPress={() => {
             this.props.navigation.navigate('Camera')
           }} /> : <Icon name='refresh' onPress={() => {
             this.fetchAndRetrieve();
           }} />}
-          rightComponent={<Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }} onPress={async () => {
-            await AsyncStorage.clear()
-              .then(() => {
-                this.retrieveData()
-              })
+          rightComponent={<Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }} onPress={() => {
+            this.setState({ isConfirmModalVisible: true })
           }}>Reset</Text>}
         />
-        <App data={this.state.nClasses} />
+        <App />
+        <Modal
+          visible={this.state.isConfirmModalVisible}
+          onRequestClose={() => {
+            this.setState({ isConfirmModalVisible: false })
+          }}
+          transparent={true}
+          animationType="slide"
+        >
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignContent: 'center' }}>
+            <View style={{ backgroundColor: 'white', width: 350, padding: 15, borderRadius: 10, alignSelf: 'center' }}>
+              <Text style={{ textAlign: 'center', fontSize: 19 }}>Sunteti sigur/a ca doriti sa stergeti toate datele? Singura modalitate de a reaccesa datele va fi prin scanarea codului QR.</Text>
+              <View style={{ margin: 10, flexDirection: "column", alignSelf: 'center' }}></View>
+              <Button
+                title="Da"
+                backgroundColor="#1E6EC7"
+                underlayColor="#1E6EC7"
+                onPress={async () => {
+                  await AsyncStorage.clear()
+                    .then(() => {
+                      this.retrieveData()
+                      this.setState({ isConfirmModalVisible: false });
+                    })
+                }}
+              />
+              <Button
+                title="Nu"
+                containerViewStyle={{ marginTop: 5 }}
+                onPress={() => this.setState({ isConfirmModalVisible: false })}
+                backgroundColor="#1E6EC7"
+                underlayColor="#1E6EC7"
+              />
+            </View>
+          </View>
+        </Modal>
       </React.Fragment>
     );
   }
