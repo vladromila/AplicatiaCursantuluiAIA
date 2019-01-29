@@ -16,7 +16,7 @@ class ClassesList extends React.Component {
                             <View style={{ marginRight: 10 }}>
                                 <Text style={{ fontSize: 19, fontWeight: '500' }}>{classData.hour < 10 ? `0${classData.hour}` : `${classData.hour}`}:{classData.minutes >= 0 && classData.minutes < 10 ? `${classData.minutes}0` : `${classData.minutes}`}</Text>
                                 <Text style={{ fontSize: 16 }}>{classData.minutes + 30 >= 60 ? `${classData.hour + 2}` : `${classData.hour + 1}`}:{(classData.minutes + 30) % 60 >= 0 && (classData.minutes + 30) % 60 < 10 ? `${(classData.minutes + 30) % 60}0` : `${(classData.minutes + 30) % 60}`}</Text></View></View>}
-                        title={<View style={{ marginLeft: 6, flexDirection: 'column' }}>{classData.location !== '' && classData.location ? <Text style={{ fontSize: 17, fontWeight: '200' }}>Locatie: <Text style={{ fontWeight: 'bold' }}>{`${classData.location}`}</Text></Text> : null}<Text style={{ fontSize: 19, fontWeight: '700' }}>{classData.day} {monthsShort[classData.month]} {classData.year}</Text><Text style={{ fontSize: 17, fontWeight: '200' }}>{classData.tip === "normala" ? "Sedinta de scolarizare" : "Sedinta de perfectionare"}</Text></View>}
+                        title={<View style={{ marginLeft: 6, flexDirection: 'column' }}>{classData.location !== '' && classData.location ? <Text style={{ fontSize: 17, fontWeight: '200' }}>Locatie: <Text style={{ fontWeight: 'bold' }}>{`${classData.location}`}</Text></Text> : null}<Text style={{ fontSize: 19, fontWeight: '700' }}>{classData.day} {monthsShort[classData.month]} {classData.year}</Text></View>}
                         hideChevron
                     />
                 })}
